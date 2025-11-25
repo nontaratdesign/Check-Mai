@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
     define: {
       // This allows the existing code using process.env.API_KEY to work
       // by injecting the Vercel Environment Variable at build time.
-      'process.env.API_KEY': JSON.stringify(env.API_KEY),
+      'process.env.API_KEY': JSON.stringify("AIzaSyCR6V78BADSUG6kl4VjxCbOQrsOPbov2Rc"),
     },
     build: {
       target: 'esnext'
