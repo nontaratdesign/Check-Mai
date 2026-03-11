@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Upload, AlertOctagon, Loader2, Wrench, Hammer, CheckCircle, AlertTriangle, ArrowRight, Stethoscope, FileText, Ban, MessagesSquare, Send, MessageCircle, Users, MessageSquareQuote } from 'lucide-react';
+import { AlertOctagon, Loader2, Wrench, Hammer, AlertTriangle, ArrowRight, Stethoscope, FileText, Ban, MessagesSquare, Send, Users, MessageSquareQuote } from 'lucide-react';
 import { analyzeFurnitureDamage, analyzeWoodStructure } from '../services/geminiService';
 import { DamageAnalysisResult, ChatMessage } from '../types';
 
@@ -53,7 +53,7 @@ const DamageAnalyzer: React.FC = () => {
       const analysis = await analyzeFurnitureDamage(damageImage, blueprintImage, userContext);
       setResult(analysis);
       setActiveExpertIndex(null); // Reset to summary
-    } catch (error) {
+    } catch {
       alert("Analysis failed. Please try a different image.");
     } finally {
       setIsAnalyzing(false);
@@ -100,7 +100,7 @@ const DamageAnalyzer: React.FC = () => {
             role: 'model',
             text: responseText
         }]);
-    } catch (e) {
+    } catch {
         setChatMessages(prev => [...prev, {
             id: Date.now().toString(),
             role: 'model',

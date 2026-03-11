@@ -2,9 +2,9 @@ import { GoogleGenAI, GenerateContentResponse, Type } from "@google/genai";
 import { StructuralAnalysisResult, DamageAnalysisResult, StructureComparisonResult } from "../types";
 
 const getAiClient = () => {
-  const apiKey = process.env.API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    throw new Error("API Key is missing. Please ensure process.env.API_KEY is available.");
+    throw new Error("API Key is missing. Please ensure process.env.GEMINI_API_KEY is available.");
   }
   return new GoogleGenAI({ apiKey });
 };
@@ -46,9 +46,9 @@ export const analyzeWoodStructure = async (
 ): Promise<string> => {
   try {
     const ai = getAiClient();
-    const modelId = "gemini-2.5-flash"; 
+    const modelId = "gemini-3-flash-preview"; 
 
-    let contents: any;
+    let contents: { parts: ({ text: string } | { inlineData: { mimeType: string; data: string } })[] };
 
     const fullSystemInstruction = `You are an expert structural engineer and master carpenter for Moonler Furniture.
     
@@ -62,10 +62,12 @@ export const analyzeWoodStructure = async (
     4. Reply in Thai (Human-like, professional tone).`;
 
     if (imageBase64) {
+      const mimeTypeMatch = imageBase64.match(/^data:(.*);base64,/);
+      const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : 'image/jpeg';
       const base64Data = imageBase64.split(',')[1] || imageBase64;
       contents = {
         parts: [
-          { inlineData: { mimeType: 'image/jpeg', data: base64Data } },
+          { inlineData: { mimeType, data: base64Data } },
           { text: promptText }
         ]
       };
@@ -78,7 +80,7 @@ export const analyzeWoodStructure = async (
       contents: contents,
       config: {
         systemInstruction: fullSystemInstruction,
-        thinkingConfig: { thinkingBudget: 0 } 
+        // thinkingConfig removed to support standard API keys
       }
     });
 
@@ -124,7 +126,7 @@ export const analyzeFurnitureImage = async (
       : `Analyze this Image (Samanea Saman). ${corePrompt}`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3-flash-preview",
       contents: {
         parts: [
           { inlineData: { mimeType: mimeType, data: base64Data } },
@@ -206,7 +208,7 @@ export const analyzeFurnitureDamage = async (
     };
 
     const damageImg = getParts(damageFileDataUrl);
-    const parts: any[] = [{ inlineData: { mimeType: damageImg.mimeType, data: damageImg.data } }];
+    const parts: { inlineData: { mimeType: string; data: string } }[] = [{ inlineData: { mimeType: damageImg.mimeType, data: damageImg.data } }];
 
     if (blueprintFileDataUrl) {
         const blueprintImg = getParts(blueprintFileDataUrl);
@@ -230,7 +232,7 @@ export const analyzeFurnitureDamage = async (
     parts.push({ text: promptText });
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3-flash-preview",
       contents: { parts: parts },
       config: {
         responseMimeType: "application/json",
@@ -308,7 +310,7 @@ export const compareFurnitureDesigns = async (
     ];
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3-flash-preview",
       contents: { parts },
       config: {
         responseMimeType: "application/json",

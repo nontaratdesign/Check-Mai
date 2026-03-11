@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Upload, X, Loader2, Camera, AlertCircle } from 'lucide-react';
+import { Send, Upload, X, Loader2 } from 'lucide-react';
 import { analyzeWoodStructure } from '../services/geminiService';
 import { ChatMessage } from '../types';
 
@@ -8,7 +8,7 @@ const AIWoodExpert: React.FC = () => {
     {
       id: '1',
       role: 'model',
-      text: 'สวัสดีครับ! ผมคือผู้เชี่ยวชาญด้านโครงสร้างไม้จามจุรี (AI Consultant). ถ่ายรูปเฟอร์นิเจอร์ หรือถามคำถามเกี่ยวกับการรับน้ำหนัก การดูแลรักษา หรือเกรดไม้ได้เลยครับ'
+      text: 'สวัสดีครับ! ผมคือผู้เชี่ยวชาญด้านโครงสร้างไม้จามจุรี (AI Consultant). อัปโหลดรูปเฟอร์นิเจอร์ หรือถามคำถามเกี่ยวกับการรับน้ำหนัก การดูแลรักษา หรือเกรดไม้ได้เลยครับ'
     }
   ]);
   const [inputText, setInputText] = useState('');
@@ -61,7 +61,7 @@ const AIWoodExpert: React.FC = () => {
         text: responseText
       };
       setMessages(prev => [...prev, aiResponse]);
-    } catch (error) {
+    } catch {
       const errorMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
         role: 'model',
@@ -84,7 +84,7 @@ const AIWoodExpert: React.FC = () => {
           </div>
           <div>
             <h3 className="font-bold">Check-Mai AI Expert</h3>
-            <p className="text-xs text-wood-200">Powered by Gemini 2.5 Flash</p>
+            <p className="text-xs text-wood-200">Powered by Gemini 3 Flash</p>
           </div>
         </div>
       </div>
@@ -134,7 +134,7 @@ const AIWoodExpert: React.FC = () => {
         
         <div className="flex gap-2">
            <label className="cursor-pointer p-3 text-wood-500 hover:bg-wood-50 rounded-xl transition-colors flex items-center justify-center border border-transparent hover:border-wood-200">
-             <Camera className="w-5 h-5" />
+             <Upload className="w-5 h-5" />
              <input 
                type="file" 
                accept="image/*" 

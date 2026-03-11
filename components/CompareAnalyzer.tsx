@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Upload, ArrowRight, Loader2, GitCompare, Trophy, CheckCircle, XCircle, Scale } from 'lucide-react';
+import { Upload, Loader2, GitCompare, Trophy, CheckCircle, XCircle, Scale } from 'lucide-react';
 import { compareFurnitureDesigns } from '../services/geminiService';
 import { StructureComparisonResult } from '../types';
 
@@ -30,7 +30,7 @@ const CompareAnalyzer: React.FC = () => {
     try {
       const data = await compareFurnitureDesigns(imageA, imageB, context);
       setResult(data);
-    } catch (e) {
+    } catch {
       alert("Comparison failed. Try different images.");
     } finally {
       setIsAnalyzing(false);

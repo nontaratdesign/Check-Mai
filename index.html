@@ -36,23 +36,17 @@
       body {
         background-color: #fbf7f1;
       }
+      @keyframes highlight-pulse {
+        0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); border-width: 2px; }
+        50% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); border-width: 4px; }
+        100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); border-width: 2px; }
+      }
+      .weak-point-active {
+        animation: highlight-pulse 1.5s infinite;
+        z-index: 30;
+      }
     </style>
-<script type="importmap">
-{
-  "imports": {
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "recharts": "https://aistudiocdn.com/recharts@^3.5.0",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
-    "jspdf": "https://aistudiocdn.com/jspdf@^3.0.4",
-    "vite": "https://aistudiocdn.com/vite@^7.2.4",
-    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1"
-  }
-}
-</script>
-</head>
+  </head>
   <body>
     <div id="root"></div>
     <!-- Entry point for Vite -->

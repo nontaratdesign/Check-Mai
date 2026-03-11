@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Upload, Camera, Loader2, AlertTriangle, CheckCircle, Target, ArrowRight, ShieldAlert, ScanLine, FileDown, FileText, FileType, Ruler, Eye, Users, MessageSquareQuote } from 'lucide-react';
+import { Loader2, AlertTriangle, Target, ArrowRight, ShieldAlert, ScanLine, FileDown, FileText, FileType, Ruler, Eye, Users, MessageSquareQuote } from 'lucide-react';
 import { analyzeFurnitureImage } from '../services/geminiService';
 import { StructuralAnalysisResult } from '../types';
 import { jsPDF } from "jspdf";
@@ -47,7 +47,7 @@ const StructureAnalyzer: React.FC = () => {
       const analysis = await analyzeFurnitureImage(selectedFile.uri, userContext);
       setResult(analysis);
       setActiveExpertIndex(null); // Reset to summary view
-    } catch (error) {
+    } catch {
       alert("Analysis failed. Please try a different file.");
     } finally {
       setIsAnalyzing(false);
@@ -74,8 +74,8 @@ const StructureAnalyzer: React.FC = () => {
         doc.addFileToVFS("Sarabun-Regular.ttf", base64Font);
         doc.addFont("Sarabun-Regular.ttf", "Sarabun", "normal");
         doc.setFont("Sarabun");
-    } catch (e) {
-        console.warn("Failed to load Thai font for PDF. Text may not render correctly.", e);
+    } catch {
+        console.warn("Failed to load Thai font for PDF. Text may not render correctly.");
     }
 
     // Header
@@ -228,10 +228,10 @@ const StructureAnalyzer: React.FC = () => {
                           return (
                               <div
                                 key={index}
-                                className={`absolute border-2 transition-all cursor-pointer ${
+                                className={`absolute border-2 transition-all cursor-pointer rounded-sm ${
                                     activeWeakPointIndex === index 
-                                    ? 'border-red-600 bg-red-500/30 z-20 shadow-[0_0_15px_rgba(220,38,38,0.7)]' 
-                                    : 'border-red-500/60 hover:border-red-500 hover:bg-red-500/10 z-10'
+                                    ? 'border-red-600 bg-red-500/40 weak-point-active' 
+                                    : 'border-red-500/40 hover:border-red-500 hover:bg-red-500/10 z-10'
                                 }`}
                                 style={{
                                     top: `${ymin}%`,
@@ -241,6 +241,7 @@ const StructureAnalyzer: React.FC = () => {
                                 }}
                                 onMouseEnter={() => setActiveWeakPointIndex(index)}
                                 onMouseLeave={() => setActiveWeakPointIndex(null)}
+                                onClick={() => setActiveWeakPointIndex(activeWeakPointIndex === index ? null : index)}
                               >
                                 {activeWeakPointIndex === index && (
                                     <div className="absolute -top-8 left-0 bg-red-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-30 shadow-md">
@@ -481,6 +482,7 @@ const StructureAnalyzer: React.FC = () => {
                         }`}
                         onMouseEnter={() => setActiveWeakPointIndex(idx)}
                         onMouseLeave={() => setActiveWeakPointIndex(null)}
+                        onClick={() => setActiveWeakPointIndex(activeWeakPointIndex === idx ? null : idx)}
                       >
                         <div className="mr-3 flex-shrink-0 mt-0.5">
                             {activeWeakPointIndex === idx ? <Eye className="w-4 h-4" /> : <span className="w-4 h-4 block text-center font-bold">{idx + 1}</span>}

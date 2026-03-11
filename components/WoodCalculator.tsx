@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
-import { Info, AlertTriangle, CheckCircle, RotateCcw } from 'lucide-react';
+import { AlertTriangle, CheckCircle, RotateCcw } from 'lucide-react';
 import { SAMANEA_PROPERTIES } from '../constants';
-import { CalculationInputs, CalculationResult } from '../types';
+import { CalculationInputs } from '../types';
 
 const WoodCalculator: React.FC = () => {
   const [inputs, setInputs] = useState<CalculationInputs>({
@@ -13,10 +13,8 @@ const WoodCalculator: React.FC = () => {
     loadType: 'center'
   });
 
-  const [result, setResult] = useState<CalculationResult | null>(null);
-
   // Real-time calculation
-  useEffect(() => {
+  const result = useMemo(() => {
     // 1. Convert to SI units (meters, Newtons, Pascals)
     const L = inputs.length / 100; // m
     const w = inputs.width / 100;  // m
@@ -64,19 +62,18 @@ const WoodCalculator: React.FC = () => {
     const volume = L * w * t;
     const weightKg = volume * SAMANEA_PROPERTIES.density;
 
-    setResult({
+    return {
       deflection: deflectionMM,
       bendingStress: stressMPa,
       safetyFactor: safetyFactor,
       isSafe: safetyFactor > 1.5, // 1.5 is a bare minimum for furniture
       maxLoadRecommended: maxLoadKg,
       weightOfBoard: weightKg
-    });
+    };
   }, [inputs]);
 
   // Generate chart data based on current geometry
   const chartData = useMemo(() => {
-    if (!result) return [];
     const data = [];
     // Generate 10 points up to 1.5x the max recommended load
     const maxPlotLoad = result.maxLoadRecommended * 1.5;
@@ -99,14 +96,14 @@ const WoodCalculator: React.FC = () => {
       }
       data.push({
         load: Math.round(load),
-        deflection: (defM * 1000).toFixed(2),
+        deflection: Number((defM * 1000).toFixed(2)),
         safeLimit: result.maxLoadRecommended
       });
     }
     return data;
   }, [inputs, result]);
 
-  const handleInputChange = (field: keyof CalculationInputs, value: any) => {
+  const handleInputChange = (field: keyof CalculationInputs, value: string | number) => {
     setInputs(prev => ({ ...prev, [field]: value }));
   };
 
@@ -247,7 +244,7 @@ const WoodCalculator: React.FC = () => {
                   <YAxis label={{ value: 'Deflection (mm)', angle: -90, position: 'insideLeft' }} />
                   <Tooltip 
                     contentStyle={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e5e7eb' }}
-                    formatter={(value: any) => [`${value} mm`, 'Deflection']}
+                    formatter={(value: number) => [`${value} mm`, 'Deflection']}
                   />
                   <ReferenceLine x={inputs.load} stroke="red" strokeDasharray="3 3" label="Current" />
                   <Area type="monotone" dataKey="deflection" stroke="#ba5e2c" fillOpacity={1} fill="url(#colorDef)" />
