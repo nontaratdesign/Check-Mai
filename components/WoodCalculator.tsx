@@ -113,16 +113,16 @@ const WoodCalculator: React.FC = () => {
       <div className="bg-white p-6 rounded-2xl shadow-sm border border-wood-200">
         <h2 className="text-xl font-bold text-wood-900 mb-6 flex items-center">
           <RotateCcw className="w-5 h-5 mr-2" />
-          Parameters (ขนาดและน้ำหนัก)
+          พารามิเตอร์ (ขนาดและน้ำหนัก)
         </h2>
         
         <div className="space-y-6">
           {/* Dimensions */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Dimensions (ขนาดไม้)</h3>
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">ขนาด (Dimensions)</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-wood-800 mb-1">Length (ยาว - cm)</label>
+                <label className="block text-sm font-medium text-wood-800 mb-1">ความยาว (cm)</label>
                 <input 
                   type="number" 
                   value={inputs.length}
@@ -131,7 +131,7 @@ const WoodCalculator: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-wood-800 mb-1">Width (กว้าง - cm)</label>
+                <label className="block text-sm font-medium text-wood-800 mb-1">ความกว้าง (cm)</label>
                 <input 
                   type="number" 
                   value={inputs.width}
@@ -140,7 +140,7 @@ const WoodCalculator: React.FC = () => {
                 />
               </div>
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-wood-800 mb-1">Thickness (หนา - cm)</label>
+                <label className="block text-sm font-medium text-wood-800 mb-1">ความหนา (cm)</label>
                 <div className="flex items-center gap-4">
                   <input 
                     type="range" 
@@ -162,9 +162,9 @@ const WoodCalculator: React.FC = () => {
 
           {/* Load */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Load (น้ำหนักบรรทุก)</h3>
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">น้ำหนักบรรทุก (Load)</h3>
             <div>
-              <label className="block text-sm font-medium text-wood-800 mb-1">Total Weight (kg)</label>
+              <label className="block text-sm font-medium text-wood-800 mb-1">น้ำหนักรวม (kg)</label>
               <input 
                 type="number" 
                 value={inputs.load}
@@ -173,19 +173,19 @@ const WoodCalculator: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-wood-800 mb-2">Load Type</label>
+              <label className="block text-sm font-medium text-wood-800 mb-2">ประเภทการวางน้ำหนัก</label>
               <div className="flex gap-4">
                 <button 
                   onClick={() => handleInputChange('loadType', 'center')}
                   className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium border ${inputs.loadType === 'center' ? 'bg-wood-100 border-wood-500 text-wood-800' : 'border-gray-200 text-gray-600'}`}
                 >
-                  Center Point
+                  จุดกึ่งกลาง (Center)
                 </button>
                 <button 
                   onClick={() => handleInputChange('loadType', 'distributed')}
                   className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium border ${inputs.loadType === 'distributed' ? 'bg-wood-100 border-wood-500 text-wood-800' : 'border-gray-200 text-gray-600'}`}
                 >
-                  Distributed
+                  กระจายตัว (Distributed)
                 </button>
               </div>
             </div>
@@ -199,9 +199,9 @@ const WoodCalculator: React.FC = () => {
         <div className={`p-6 rounded-2xl border-l-8 shadow-sm ${result?.isSafe ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'}`}>
           <div className="flex justify-between items-start mb-4">
             <div>
-              <h3 className="text-lg font-bold text-gray-900">Structural Status</h3>
+              <h3 className="text-lg font-bold text-gray-900">สถานะโครงสร้าง (Structural Status)</h3>
               <p className={`text-sm font-medium ${result?.isSafe ? 'text-green-700' : 'text-red-700'}`}>
-                {result?.isSafe ? 'PASSED (ปลอดภัย)' : 'FAILED (อันตราย - หักหรือแอ่นมากเกินไป)'}
+                {result?.isSafe ? 'ผ่าน (ปลอดภัย)' : 'ไม่ผ่าน (อันตราย - หักหรือแอ่นมากเกินไป)'}
               </p>
             </div>
             {result?.isSafe ? <CheckCircle className="text-green-500 w-8 h-8" /> : <AlertTriangle className="text-red-500 w-8 h-8" />}
@@ -209,19 +209,19 @@ const WoodCalculator: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-4">
              <div className="bg-white/60 p-3 rounded-lg">
-                <p className="text-xs text-gray-500">Deflection (ระยะแอ่น)</p>
+                <p className="text-xs text-gray-500">การแอ่นตัว (Deflection)</p>
                 <p className="text-xl font-bold text-gray-800">{result?.deflection.toFixed(2)} <span className="text-sm font-normal">mm</span></p>
              </div>
              <div className="bg-white/60 p-3 rounded-lg">
-                <p className="text-xs text-gray-500">Safety Factor</p>
+                <p className="text-xs text-gray-500">ค่าความปลอดภัย (Safety Factor)</p>
                 <p className="text-xl font-bold text-gray-800">{result?.safetyFactor.toFixed(2)}</p>
              </div>
              <div className="bg-white/60 p-3 rounded-lg">
-                <p className="text-xs text-gray-500">Rec. Max Load</p>
+                <p className="text-xs text-gray-500">น้ำหนักแนะนำสูงสุด</p>
                 <p className="text-xl font-bold text-gray-800">{Math.round(result?.maxLoadRecommended || 0)} <span className="text-sm font-normal">kg</span></p>
              </div>
              <div className="bg-white/60 p-3 rounded-lg">
-                <p className="text-xs text-gray-500">Board Weight</p>
+                <p className="text-xs text-gray-500">น้ำหนักแผ่นไม้</p>
                 <p className="text-xl font-bold text-gray-800">{result?.weightOfBoard.toFixed(1)} <span className="text-sm font-normal">kg</span></p>
              </div>
           </div>
@@ -229,7 +229,7 @@ const WoodCalculator: React.FC = () => {
 
         {/* Chart */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-wood-200">
-           <h3 className="text-sm font-semibold text-gray-500 uppercase mb-4">Load vs. Deflection Simulation</h3>
+           <h3 className="text-sm font-semibold text-gray-500 uppercase mb-4">การจำลองน้ำหนักเทียบกับการแอ่นตัว (Load vs. Deflection)</h3>
            <div className="h-64 w-full">
              <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartData}>
@@ -240,19 +240,19 @@ const WoodCalculator: React.FC = () => {
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="load" label={{ value: 'Load (kg)', position: 'insideBottomRight', offset: -5 }} />
-                  <YAxis label={{ value: 'Deflection (mm)', angle: -90, position: 'insideLeft' }} />
+                  <XAxis dataKey="load" label={{ value: 'น้ำหนัก (kg)', position: 'insideBottomRight', offset: -5 }} />
+                  <YAxis label={{ value: 'การแอ่นตัว (mm)', angle: -90, position: 'insideLeft' }} />
                   <Tooltip 
                     contentStyle={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e5e7eb' }}
-                    formatter={(value: number) => [`${value} mm`, 'Deflection']}
+                    formatter={(value: number) => [`${value} mm`, 'การแอ่นตัว']}
                   />
-                  <ReferenceLine x={inputs.load} stroke="red" strokeDasharray="3 3" label="Current" />
+                  <ReferenceLine x={inputs.load} stroke="red" strokeDasharray="3 3" label="ปัจจุบัน" />
                   <Area type="monotone" dataKey="deflection" stroke="#ba5e2c" fillOpacity={1} fill="url(#colorDef)" />
                 </AreaChart>
              </ResponsiveContainer>
            </div>
            <p className="text-xs text-gray-400 mt-2 text-center">
-             *Simulation based on average Samanea properties (MOR: 65MPa, MOE: 9.5GPa). Actual wood varies.
+             *การจำลองอ้างอิงจากค่าเฉลี่ยของไม้จามจุรี (MOR: 65MPa, MOE: 9.5GPa) ค่าจริงอาจคลาดเคลื่อนตามสภาพไม้
            </p>
         </div>
       </div>

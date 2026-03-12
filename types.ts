@@ -97,8 +97,62 @@ export interface StructureComparisonResult {
   productionRecommendation: string; // Which one is better for Moonler production?
 }
 
+export interface SimulatorInputs {
+  type: 'table' | 'bench' | 'shelf' | 'cantilever' | 'chair';
+  length: number; // cm
+  width: number;  // cm
+  thickness: number; // cm
+  load: number;   // kg
+  legCount: number;
+  legWidth: number; // cm
+  legThickness: number; // cm
+  legHeight: number; // cm
+  apronHeight: number; // cm
+  apronThickness: number; // cm
+  stretcherHeight: number; // cm
+  stretcherWidth: number; // cm
+  stretcherThickness: number; // cm
+  topOverhang: number; // cm
+  jointType: 'dowel' | 'mortise_tenon' | 'screw' | 'butterfly' | 'butt';
+  jointThickness: number; // mm
+  jointLength: number; // mm
+  jointWidth: number; // mm
+  jointsPerConnection: number;
+  backrestHeight: number; // cm
+  backrestAngle: number; // degrees
+  backrestLoad: number; // kg
+  armrestLoad: number; // kg
+  legAngle: number; // degrees
+  shelfTiers: number;
+  seatDepth: number; // cm
+}
+
+export interface SimulationExtractionResult {
+  furnitureType: 'table' | 'bench' | 'shelf' | 'cantilever' | 'chair';
+  lengthCm: number;
+  widthCm: number;
+  thicknessCm: number;
+  legCount: number;
+  legWidthCm: number;
+  legThicknessCm?: number;
+  apronHeightCm: number;
+  stretcherHeightCm: number;
+  stretcherWidthCm: number;
+  stretcherThicknessCm: number;
+  topOverhangCm: number;
+  jointType: 'dowel' | 'mortise_tenon' | 'screw' | 'butterfly' | 'butt';
+  backrestHeightCm?: number;
+  backrestAngleDeg?: number;
+  legAngleDeg?: number;
+  shelfTiers?: number;
+  seatDepthCm?: number;
+  confidence: number;
+  reasoning: string;
+}
+
 export enum AppTab {
   CALCULATOR = 'calculator',
+  LOAD_SIMULATOR = 'load_simulator',
   SMART_ANALYSIS = 'smart_analysis',
   COMPARE = 'compare',
   DAMAGE_CHECK = 'damage_check',

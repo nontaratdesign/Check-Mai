@@ -109,9 +109,9 @@ export const analyzeFurnitureImage = async (
          ${WOOD_SPECS_CONTEXT}
 
          **SIMULATE A PANEL OF 5 EXPERTS** to debate this design based on the wood data above:
-         1. **Structural Engineer**: Calculate load paths. Is the design stiff enough for a Soft-Medium Hardwood (Density 0.53 g/cm³)?
+         1. **Structural Engineer**: Calculate load paths. Is the design stiff enough for a Soft-Medium Hardwood (Density 0.53 g/cm³)? For chairs, consider backrest leverage and leg angles.
          2. **Material Scientist**: Review thickness. Since Density is only ~0.53g/cm³, components usually need to be thicker than Teak. Mention the benefit of Low Shrinkage (1.8%). Check if MC% (15-20%) aligns with Moonler standard.
-         3. **Master Carpenter**: Analyze joinery. Primary uses **Wooden Dowels**, but check if **Screws** are used in critical areas to enhance strength (which is allowed). Are the connections logical?
+         3. **Master Carpenter**: Analyze joinery. Primary uses **Wooden Dowels**, but check if **Screws** are used in critical areas to enhance strength (which is allowed). Are the connections logical? Check backrest-to-seat and leg-to-apron joints for angled stress.
          4. **Production QC**: Look for "Surface Checks" or potential drying defects mentioned in the specs.
          5. **Safety Inspector**: Assess stability.
 
@@ -269,6 +269,89 @@ export const analyzeFurnitureDamage = async (
     return JSON.parse(response.text) as DamageAnalysisResult;
   } catch (error) {
     console.error("Gemini Damage Analysis Error:", error);
+    throw error;
+  }
+};
+
+export const extractSimulationData = async (
+  fileDataUrl: string
+): Promise<SimulationExtractionResult> => {
+  try {
+    const ai = getAiClient();
+    const mimeTypeMatch = fileDataUrl.match(/^data:(.*);base64,/);
+    const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : 'image/jpeg';
+    const base64Data = fileDataUrl.split(',')[1] || fileDataUrl;
+
+    const promptText = `
+      Extract numerical structural data from this furniture blueprint or image for a load simulation.
+      Wood: Samanea Saman (Rain Tree).
+      
+      Return ONLY JSON with these fields:
+      - furnitureType: 'table', 'bench', 'shelf', 'cantilever', or 'chair'
+      - lengthCm: overall length in cm
+      - widthCm: overall width in cm
+      - thicknessCm: material thickness in cm
+      - legCount: number of legs
+      - legWidthCm: width of the legs in cm
+      - legThicknessCm: thickness of the legs in cm
+      - apronHeightCm: height of the supporting apron/rail under the top in cm
+      - stretcherHeightCm: height of the stretcher connecting legs in cm (0 if none)
+      - stretcherWidthCm: width of the stretcher in cm
+      - stretcherThicknessCm: thickness of the stretcher in cm
+      - topOverhangCm: distance from leg to edge of top in cm
+      - jointType: 'dowel', 'mortise_tenon', 'screw', 'butterfly', or 'butt'
+      - backrestHeightCm: (for chairs) height of backrest in cm
+      - backrestAngleDeg: (for chairs) angle of backrest in degrees
+      - seatDepthCm: (for chairs) depth of the seat in cm
+      - shelfTiers: (for shelves) number of shelf levels
+      - legAngleDeg: angle of legs in degrees (0 is vertical)
+      - confidence: 1-10
+      - reasoning: brief explanation of why these values were chosen
+    `;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: {
+        parts: [
+          { inlineData: { mimeType, data: base64Data } },
+          { text: promptText }
+        ]
+      },
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            furnitureType: { type: Type.STRING, enum: ['table', 'bench', 'shelf', 'cantilever', 'chair'] },
+            lengthCm: { type: Type.NUMBER },
+            widthCm: { type: Type.NUMBER },
+            thicknessCm: { type: Type.NUMBER },
+            legCount: { type: Type.NUMBER },
+            legWidthCm: { type: Type.NUMBER },
+            legThicknessCm: { type: Type.NUMBER },
+            apronHeightCm: { type: Type.NUMBER },
+            stretcherHeightCm: { type: Type.NUMBER },
+            stretcherWidthCm: { type: Type.NUMBER },
+            stretcherThicknessCm: { type: Type.NUMBER },
+            topOverhangCm: { type: Type.NUMBER },
+            jointType: { type: Type.STRING, enum: ['dowel', 'mortise_tenon', 'screw', 'butterfly', 'butt'] },
+            backrestHeightCm: { type: Type.NUMBER },
+            backrestAngleDeg: { type: Type.NUMBER },
+            seatDepthCm: { type: Type.NUMBER },
+            shelfTiers: { type: Type.NUMBER },
+            legAngleDeg: { type: Type.NUMBER },
+            confidence: { type: Type.NUMBER },
+            reasoning: { type: Type.STRING }
+          },
+          required: ["furnitureType", "lengthCm", "widthCm", "thicknessCm", "legCount", "legWidthCm", "apronHeightCm", "stretcherHeightCm", "stretcherWidthCm", "stretcherThicknessCm", "topOverhangCm", "jointType", "confidence", "reasoning"]
+        }
+      }
+    });
+
+    if (!response.text) throw new Error("No response from AI");
+    return JSON.parse(response.text) as SimulationExtractionResult;
+  } catch (error) {
+    console.error("Gemini Extraction Error:", error);
     throw error;
   }
 };

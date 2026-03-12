@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
-import { Calculator, MessagesSquare, Info as InfoIcon, TreePine, ScanLine, AlertOctagon, GitCompare } from 'lucide-react';
+import { Calculator, MessagesSquare, Info as InfoIcon, TreePine, ScanLine, AlertOctagon, GitCompare, Activity } from 'lucide-react';
 import WoodCalculator from './components/WoodCalculator';
+import FurnitureLoadSimulator from './components/FurnitureLoadSimulator';
 import AIWoodExpert from './components/AIWoodExpert';
 import StructureAnalyzer from './components/StructureAnalyzer';
 import DamageAnalyzer from './components/DamageAnalyzer';
@@ -19,10 +20,10 @@ const App: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <TreePine className="w-8 h-8 text-wood-300" />
-            <h1 className="text-xl font-bold tracking-tight">Check-<span className="text-wood-300">Mai</span></h1>
+            <h1 className="text-xl font-bold tracking-tight">Check-<span className="text-wood-300">ไม้</span></h1>
           </div>
           <div className="text-xs text-wood-300 hidden sm:block">
-            Moonler Structure AI tester
+            ระบบ AI วิเคราะห์โครงสร้าง Moonler
           </div>
         </div>
       </nav>
@@ -51,7 +52,18 @@ const App: React.FC = () => {
             }`}
           >
             <Calculator className="w-4 h-4" />
-            Load Calculator (คำนวณ)
+            เครื่องคำนวณน้ำหนัก
+          </button>
+          <button
+            onClick={() => setActiveTab(AppTab.LOAD_SIMULATOR)}
+            className={`flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all shadow-sm whitespace-nowrap ${
+              activeTab === AppTab.LOAD_SIMULATOR
+                ? 'bg-wood-600 text-white ring-4 ring-wood-600/20'
+                : 'bg-white text-gray-600 hover:bg-wood-50'
+            }`}
+          >
+            <Activity className="w-4 h-4" />
+            ระบบจำลองการรับน้ำหนัก
           </button>
           <button
             onClick={() => setActiveTab(AppTab.SMART_ANALYSIS)}
@@ -62,7 +74,7 @@ const App: React.FC = () => {
             }`}
           >
             <ScanLine className="w-4 h-4" />
-            Analysis (วิเคราะห์แบบ)
+            วิเคราะห์แบบโครงสร้าง
           </button>
           <button
             onClick={() => setActiveTab(AppTab.COMPARE)}
@@ -73,7 +85,7 @@ const App: React.FC = () => {
             }`}
           >
             <GitCompare className="w-4 h-4" />
-            Compare (เปรียบเทียบ)
+            เปรียบเทียบดีไซน์
           </button>
           <button
             onClick={() => setActiveTab(AppTab.DAMAGE_CHECK)}
@@ -84,7 +96,7 @@ const App: React.FC = () => {
             }`}
           >
             <AlertOctagon className="w-4 h-4" />
-            Damage Check (ตรวจสอบรอยร้าว)
+            ตรวจสอบความเสียหาย
           </button>
           <button
             onClick={() => setActiveTab(AppTab.AI_CONSULTANT)}
@@ -95,7 +107,7 @@ const App: React.FC = () => {
             }`}
           >
             <MessagesSquare className="w-4 h-4" />
-            AI Consultant (ปรึกษา AI)
+            ปรึกษา AI Expert
           </button>
           <button
             onClick={() => setActiveTab(AppTab.INFO)}
@@ -106,13 +118,14 @@ const App: React.FC = () => {
             }`}
           >
             <InfoIcon className="w-4 h-4" />
-            Info (ข้อมูลไม้)
+            ข้อมูลไม้จามจุรี
           </button>
         </div>
 
         {/* Content Area */}
         <div className="transition-all duration-300">
           {activeTab === AppTab.CALCULATOR && <WoodCalculator />}
+          {activeTab === AppTab.LOAD_SIMULATOR && <FurnitureLoadSimulator />}
           {activeTab === AppTab.SMART_ANALYSIS && <StructureAnalyzer />}
           {activeTab === AppTab.COMPARE && <CompareAnalyzer />}
           {activeTab === AppTab.DAMAGE_CHECK && <DamageAnalyzer />}
@@ -124,7 +137,7 @@ const App: React.FC = () => {
               </div>
               <div className="space-y-6">
                 <div className="bg-orange-50 p-6 rounded-2xl border border-orange-200">
-                   <h3 className="font-bold text-orange-800 mb-2">How to use AI (วิธีใช้)</h3>
+                   <h3 className="font-bold text-orange-800 mb-2">วิธีใช้งาน AI Expert</h3>
                    <ul className="text-sm text-orange-900/80 space-y-2 list-disc list-inside">
                      <li>ถ่ายรูปหน้าตัดไม้เพื่อดูวงปี</li>
                      <li>ถ่ายรูปขาโต๊ะเพื่อดูการรับน้ำหนัก</li>
@@ -133,7 +146,7 @@ const App: React.FC = () => {
                    </ul>
                 </div>
                 <div className="bg-white p-6 rounded-2xl border border-wood-100 shadow-sm">
-                   <h3 className="font-bold text-gray-800 mb-2">Limitations (ข้อจำกัด)</h3>
+                   <h3 className="font-bold text-gray-800 mb-2">ข้อจำกัดการใช้งาน</h3>
                    <p className="text-sm text-gray-500">
                      AI วิเคราะห์จากภาพถ่าย อาจมีความคลาดเคลื่อน หากต้องการความแม่นยำสูงควรปรึกษาวิศวกรโครงสร้างหน้างานจริง
                    </p>
@@ -156,18 +169,18 @@ const App: React.FC = () => {
                      {SAMANEA_PROPERTIES.description}
                    </p>
                    
-                   <h3 className="font-bold text-lg mb-4 text-wood-800">Technical Properties (ค่าเฉลี่ยทางเทคนิค)</h3>
+                   <h3 className="font-bold text-lg mb-4 text-wood-800">ค่าเฉลี่ยทางเทคนิค (Technical Properties)</h3>
                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div className="p-4 bg-wood-50 rounded-lg border border-wood-100">
-                        <div className="text-xs text-wood-500 uppercase font-semibold">Density (ความหนาแน่น)</div>
+                        <div className="text-xs text-wood-500 uppercase font-semibold">ความหนาแน่น (Density)</div>
                         <div className="text-xl font-bold text-wood-900">{SAMANEA_PROPERTIES.density} <span className="text-sm">kg/m³</span></div>
                       </div>
                       <div className="p-4 bg-wood-50 rounded-lg border border-wood-100">
-                        <div className="text-xs text-wood-500 uppercase font-semibold">MOE (ค่าความยืดหยุ่น)</div>
+                        <div className="text-xs text-wood-500 uppercase font-semibold">ค่าความยืดหยุ่น (MOE)</div>
                         <div className="text-xl font-bold text-wood-900">{SAMANEA_PROPERTIES.moe} <span className="text-sm">MPa</span></div>
                       </div>
                       <div className="p-4 bg-wood-50 rounded-lg border border-wood-100">
-                        <div className="text-xs text-wood-500 uppercase font-semibold">MOR (ค่าแรงดัดสูงสุด)</div>
+                        <div className="text-xs text-wood-500 uppercase font-semibold">ค่าแรงดัดสูงสุด (MOR)</div>
                         <div className="text-xl font-bold text-wood-900">{SAMANEA_PROPERTIES.mor} <span className="text-sm">MPa</span></div>
                       </div>
                    </div>
@@ -186,7 +199,7 @@ const App: React.FC = () => {
       {/* Footer */}
       <footer className="mt-auto py-6 bg-wood-900 text-wood-300 text-center text-xs">
         <p className="mb-2 opacity-80">
-          This app does not request camera and microphone permissions. (แอปพลิเคชันนี้ไม่ได้ร้องขอการเข้าถึงกล้องและไมโครโฟน)
+          แอปพลิเคชันนี้ไม่ได้ร้องขอการเข้าถึงกล้องและไมโครโฟน
         </p>
         <p className="font-medium text-wood-200">
           Trained and Created by Nontarat Hasitapong

@@ -197,10 +197,10 @@ const StructureAnalyzer: React.FC = () => {
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-wood-200">
           <h2 className="text-xl font-bold text-wood-900 mb-2 flex items-center">
             <ScanLine className="w-6 h-6 mr-2 text-wood-600" />
-            3D & Blueprint Analysis (วิเคราะห์แบบ)
+            วิเคราะห์แบบ 3D และแบบแปลน (Analysis)
           </h2>
           <p className="text-sm text-gray-500 mb-6">
-            Upload a <strong>screenshot of your 3D model</strong> or a <strong>PDF Blueprint</strong>. The AI will analyze dimensions, leg angles, joinery details, and load distribution.
+            อัปโหลดภาพถ่ายหน้าจอโมเดล 3D หรือไฟล์ PDF แบบแปลน AI จะวิเคราะห์ขนาด, มุมขา, รายละเอียดการเข้าไม้ และการกระจายน้ำหนัก
           </p>
 
           {/* Upload Area */}
@@ -245,7 +245,7 @@ const StructureAnalyzer: React.FC = () => {
                               >
                                 {activeWeakPointIndex === index && (
                                     <div className="absolute -top-8 left-0 bg-red-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-30 shadow-md">
-                                        Weak Point #{index + 1}
+                                        จุดอ่อนที่ #{index + 1}
                                     </div>
                                 )}
                               </div>
@@ -258,7 +258,7 @@ const StructureAnalyzer: React.FC = () => {
                     onClick={() => {setSelectedFile(null); setResult(null); setActiveWeakPointIndex(null);}}
                     className="absolute top-4 right-4 bg-white/90 text-red-600 px-3 py-1.5 rounded-full shadow-sm hover:bg-white z-30 text-sm font-medium"
                   >
-                    Change File
+                    เปลี่ยนไฟล์
                   </button>
                 </div>
               ) : (
@@ -266,8 +266,8 @@ const StructureAnalyzer: React.FC = () => {
                   <div className="bg-wood-100 p-4 rounded-full mb-3">
                     <FileType className="w-8 h-8 text-wood-600" />
                   </div>
-                  <span className="text-wood-800 font-medium text-center">Click to Upload<br/>3D Image or PDF Blueprint</span>
-                  <span className="text-xs text-gray-400 mt-2">Supports JPG, PNG, PDF</span>
+                  <span className="text-wood-800 font-medium text-center">คลิกเพื่ออัปโหลด<br/>รูปภาพ 3D หรือไฟล์ PDF แบบแปลน</span>
+                  <span className="text-xs text-gray-400 mt-2">รองรับไฟล์ JPG, PNG, PDF</span>
                   <input type="file" accept="image/*,application/pdf" onChange={handleFileUpload} className="hidden" />
                 </label>
               )}
@@ -277,12 +277,12 @@ const StructureAnalyzer: React.FC = () => {
           {/* Context Input */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-wood-800 mb-2">
-              Additional Details (รายละเอียดเพิ่มเติม)
+              รายละเอียดเพิ่มเติม (Additional Details)
             </label>
             <textarea
               value={userContext}
               onChange={(e) => setUserContext(e.target.value)}
-              placeholder="Ex: Blueprint for a dining chair. Leg angle is 105 degrees. (ตัวอย่าง: เก้าอี้ทานข้าว ไม้หนา 3ซม. ต้องการรับน้ำหนัก 100กก.)"
+              placeholder="ตัวอย่าง: แบบแปลนเก้าอี้ทานข้าว ไม้หนา 3ซม. ต้องการรับน้ำหนัก 100กก."
               className="w-full px-4 py-3 border border-wood-200 rounded-xl focus:ring-2 focus:ring-wood-500 focus:outline-none h-24 text-sm"
             />
           </div>
@@ -295,11 +295,11 @@ const StructureAnalyzer: React.FC = () => {
             {isAnalyzing ? (
               <>
                 <Loader2 className="w-6 h-6 mr-2 animate-spin" />
-                Analyzing Document...
+                กำลังวิเคราะห์เอกสาร...
               </>
             ) : (
               <>
-                Analyze Structure (วิเคราะห์)
+                วิเคราะห์โครงสร้าง (Analyze Structure)
                 <ArrowRight className="w-6 h-6 ml-2" />
               </>
             )}
@@ -317,7 +317,7 @@ const StructureAnalyzer: React.FC = () => {
                
                <div className="flex justify-between items-start mb-6">
                  <div>
-                   <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider">Analysis Result</h3>
+                   <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider">ผลการวิเคราะห์ (Analysis Result)</h3>
                    <h2 className="text-2xl font-bold text-wood-900 capitalize">{result.furnitureType}</h2>
                  </div>
                  <div className={`px-4 py-1 rounded-full text-sm font-bold flex items-center ${
@@ -325,17 +325,17 @@ const StructureAnalyzer: React.FC = () => {
                    result.structuralScore >= 4 ? 'bg-yellow-100 text-yellow-700' : 
                    'bg-red-100 text-red-700'
                  }`}>
-                   Score: {result.structuralScore}/10
+                   คะแนน: {result.structuralScore}/10
                  </div>
                </div>
 
                <div className="grid grid-cols-2 gap-4 mb-4">
                   <div className="bg-wood-50 p-4 rounded-xl border border-wood-100 text-center">
-                    <div className="text-xs text-wood-500 uppercase mb-1">Max Load (รับน้ำหนัก)</div>
+                    <div className="text-xs text-wood-500 uppercase mb-1">การรับน้ำหนักสูงสุด (Max Load)</div>
                     <div className="text-3xl font-bold text-wood-800">~{result.estimatedMaxLoadKg} <span className="text-base font-normal">kg</span></div>
                   </div>
                   <div className="bg-wood-50 p-4 rounded-xl border border-wood-100 flex flex-col justify-center">
-                    <div className="text-xs text-wood-500 uppercase mb-1">Joinery (การเข้าไม้)</div>
+                    <div className="text-xs text-wood-500 uppercase mb-1">การเข้าไม้ (Joinery)</div>
                     <div className="font-semibold text-gray-700 text-sm leading-tight line-clamp-2">{result.joineryAssessment}</div>
                   </div>
                </div>
@@ -360,7 +360,7 @@ const StructureAnalyzer: React.FC = () => {
                             }`}
                         >
                             <MessageSquareQuote className="w-6 h-6 mb-1" />
-                            <span className="text-[10px] font-bold">Summary</span>
+                            <span className="text-[10px] font-bold">สรุป</span>
                         </button>
 
                         {result.expertOpinions.map((expert, idx) => {
@@ -413,7 +413,7 @@ const StructureAnalyzer: React.FC = () => {
                                                     {expert.role}
                                                 </span>
                                                 <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
-                                                    Confidence: {expert.confidence}/10
+                                                    ความมั่นใจ: {expert.confidence}/10
                                                 </span>
                                             </div>
                                             <p className="text-sm text-gray-700 leading-relaxed">{expert.analysis}</p>
@@ -429,27 +429,27 @@ const StructureAnalyzer: React.FC = () => {
                 <div className="bg-wood-50 p-5 rounded-xl border border-wood-100 mb-6">
                   <h4 className="font-bold text-wood-900 flex items-center mb-3">
                     <Ruler className="w-5 h-5 mr-2" />
-                    Dimensions & Specs (ตรวจสอบขนาด)
+                    ขนาดและสเปก (Dimensions & Specs)
                   </h4>
                   <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-sm">
                      <div>
-                       <span className="text-gray-500 block text-xs uppercase">Overall Size</span>
+                       <span className="text-gray-500 block text-xs uppercase">ขนาดโดยรวม (Overall)</span>
                        <span className="font-medium text-gray-800">{result.dimensions.overall || "-"}</span>
                      </div>
                      <div>
-                       <span className="text-gray-500 block text-xs uppercase">Leg Size</span>
+                       <span className="text-gray-500 block text-xs uppercase">ขนาดขา (Leg Size)</span>
                        <span className="font-medium text-gray-800">{result.dimensions.legDimensions || "-"}</span>
                      </div>
                      <div>
-                       <span className="text-gray-500 block text-xs uppercase">Thickness</span>
+                       <span className="text-gray-500 block text-xs uppercase">ความหนา (Thickness)</span>
                        <span className="font-medium text-gray-800">{result.dimensions.materialThickness || "-"}</span>
                      </div>
                      <div>
-                       <span className="text-gray-500 block text-xs uppercase">Key Angles</span>
+                       <span className="text-gray-500 block text-xs uppercase">มุมที่สำคัญ (Angles)</span>
                        <span className="font-medium text-gray-800">{result.dimensions.angles || "-"}</span>
                      </div>
                      <div className="col-span-2">
-                       <span className="text-gray-500 block text-xs uppercase">Joinery Specs</span>
+                       <span className="text-gray-500 block text-xs uppercase">สเปกการเข้าไม้ (Joinery)</span>
                        <span className="font-medium text-gray-800">{result.dimensions.joineryDetails || "-"}</span>
                      </div>
                   </div>
@@ -461,7 +461,7 @@ const StructureAnalyzer: React.FC = () => {
                  className="mt-2 w-full flex items-center justify-center gap-2 bg-gray-800 text-white py-3 rounded-xl hover:bg-gray-900 transition-colors shadow-sm"
                >
                  <FileDown className="w-5 h-5" />
-                 Download Report (PDF)
+                 ดาวน์โหลดรายงาน (PDF)
                </button>
             </div>
 
@@ -471,7 +471,7 @@ const StructureAnalyzer: React.FC = () => {
                <div className="bg-red-50 p-5 rounded-xl border border-red-100">
                   <h4 className="font-bold text-red-800 flex items-center mb-3">
                     <AlertTriangle className="w-5 h-5 mr-2" />
-                    Potential Weak Points (จุดอ่อน)
+                    จุดที่อาจเป็นปัญหา (Weak Points)
                   </h4>
                   <ul className="space-y-3">
                     {result.weakPoints.map((point, idx) => (
@@ -497,7 +497,7 @@ const StructureAnalyzer: React.FC = () => {
                <div className="bg-blue-50 p-5 rounded-xl border border-blue-100">
                   <h4 className="font-bold text-blue-800 flex items-center mb-3">
                     <Target className="w-5 h-5 mr-2" />
-                    Suggestions (ข้อแนะนำ)
+                    ข้อแนะนำ (Suggestions)
                   </h4>
                   <ul className="space-y-2">
                     {result.improvementSuggestions.map((point, idx) => (
@@ -514,9 +514,9 @@ const StructureAnalyzer: React.FC = () => {
             <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 flex items-start gap-3">
               <ShieldAlert className="w-5 h-5 text-gray-400 shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs text-gray-500 font-semibold mb-1">AI Safety Disclaimer</p>
+                <p className="text-xs text-gray-500 font-semibold mb-1">คำเตือนความปลอดภัยจาก AI</p>
                 <p className="text-xs text-gray-500">
-                  {result.safetyWarning || "This analysis is an AI estimation based on visual data only. Do not rely on this for critical safety loads. Physical testing is always required."}
+                  {result.safetyWarning || "ผลวิเคราะห์นี้เป็นการประเมินเบื้องต้นจาก AI อ้างอิงจากข้อมูลภาพเท่านั้น ห้ามใช้เพื่อการันตีความปลอดภัยในงานวิศวกรรมจริง ควรมีการทดสอบทางกายภาพทุกครั้ง"}
                 </p>
               </div>
             </div>
@@ -527,9 +527,9 @@ const StructureAnalyzer: React.FC = () => {
             <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-4">
               <ScanLine className="w-8 h-8 text-gray-300" />
             </div>
-            <h3 className="text-lg font-bold text-gray-400">Waiting for Design</h3>
+            <h3 className="text-lg font-bold text-gray-400">รอการอัปโหลดแบบ</h3>
             <p className="text-sm text-gray-400 max-w-xs mt-2">
-              Upload a 3D model screenshot OR a <strong>PDF Blueprint</strong>. The AI will inspect dimensions, legs, angles, and joints for production feasibility.
+              อัปโหลดภาพถ่ายหน้าจอโมเดล 3D หรือไฟล์ PDF แบบแปลน AI จะตรวจสอบขนาด, ขา, มุม และจุดต่อต่างๆ เพื่อประเมินความเป็นไปได้ในการผลิต
             </p>
           </div>
         )}
